@@ -1,0 +1,12 @@
+#loading-text {
+	text-align: center;
+	font-size: 50px;
+	margin-top: 10%;
+}
+
+#loading-subtext {
+	text-align: center;
+	font-size: 20px;
+
+	color: #bbb;
+}

@@ -1,0 +1,6 @@
+node_modules/*
+templates/*
+projects/*
+todo.txt
+blocks.json
+package-lock.json

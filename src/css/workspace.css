@@ -1,0 +1,187 @@
+.single-content-selector {
+	display: inline-flex;
+
+	justify-content: center;
+	align-items: center;
+
+	border: 1px solid #ddd;
+	border-bottom: none;
+	border-collapse: collapse;
+	border-spacing: 0px;
+
+	padding: 5px;
+	margin-bottom: 0;
+
+	width: 70px;
+	cursor: pointer;
+}
+
+#content-container {
+	border: 1px solid #ddd;
+	margin-top: 0;
+}
+
+#title {
+	margin: 30px;
+}
+
+#textures {
+	height: 700px;
+	overflow-y: auto;
+}
+
+#texture-sidebar {
+	display: none;
+	position: absolute;
+
+	background-color: white;
+	border: 1px solid #ddd;
+
+	right: 0;
+
+	width: 0%;
+	height: 100%;
+}
+
+.texture-sidebar-animation-open {
+	animation-name: texture-sidebar-keyframe-open;
+	animation-duration: 400ms;
+	animation-fill-mode: forwards;
+}
+
+.texture-sidebar-animation-close {
+	animation-name: texture-sidebar-keyframe-close;
+	animation-duration: 200ms;
+	animation-fill-mode: forwards;
+}
+
+@keyframes texture-sidebar-keyframe-open {
+	0% {width: 0%}
+	100% {width: 30%}
+}
+
+@keyframes texture-sidebar-keyframe-close {
+	0% {width: 30%}
+	100% {width: 0%}
+}
+
+#sidebar-texture-title {
+	text-align: center;
+	font-size: 20px;
+
+	color: #999;
+
+	margin: 50px 0px 50px 0px;
+}
+
+#sidebar-texture-image {
+	display: block;
+
+	image-rendering: pixelated;
+
+	width: 200px;
+	max-height: 300px;
+
+	margin-left: auto;
+	margin-right: auto;
+
+	overflow-y: auto;
+}
+
+.texture {
+	display: inline-block;
+	text-align: center;
+
+	margin: 5px;
+
+	width: 160px;
+	height: 250px;
+
+	cursor: pointer;
+
+	opacity: 0;
+	animation-name: texture-fade-in;
+	animation-duration: 500ms;
+	animation-fill-mode: forwards;
+}
+
+@keyframes texture-fade-in {
+	0% {opacity: 0}
+	100% {opacity: 1}
+}
+
+.texture-image {
+	display: inline-block;
+	image-rendering: pixelated;
+
+	border: 1px solid #888;
+	box-shadow: 0px 0px 7px #888;
+
+	margin: 3px auto 0px auto;
+
+	height: 150px;
+
+	transition: 100ms;
+}
+
+.texture-image:hover {
+	margin-top: 0px;
+	margin-bottom: 3px;
+}
+
+.texture-image:active {
+	border: 1px solid black;
+}
+
+.texture-title {
+	display: inline-flex;
+	text-align: center;
+	font-size: 14px;
+
+	word-break: break-all;
+}
+
+.sidebar-button {
+	display: block;
+
+	color: #555;
+	background-color: #dfd;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+
+	padding: 10px;
+	margin: 20px auto 0px auto;
+
+	width: 20%;
+}
+
+.general-input-label {
+	display: inline-block;
+	font-size: 30px;
+
+	color: #777;
+
+	margin: 20px;
+	margin-left: 30px;
+	width: 13%;
+}
+
+.general-input {
+	font-size: 30px;
+	border: none;
+	border-bottom: 1px solid #ccc;
+
+	padding: 5px;
+	margin-left: 50px;
+
+	width: 80%;
+}
+
+#pack-filename {
+	text-align: center;
+	font-size: 17px;
+
+	color: #999;
+
+	margin-top: 0;
+}

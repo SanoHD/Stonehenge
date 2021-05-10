@@ -1,0 +1,23 @@
+@import "fonts.css";
+@import "welcome.css";
+@import "workspace.css";
+@import "loading.css";
+
+
+* {
+	font-family: "Josefin";
+	outline: none;
+}
+
+body {
+	overflow-y: hidden;
+	height: 100%;
+}
+
+#window-welcome {
+	display: none;
+}
+
+#window-workspace {
+	display: none;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "stonehenge",
+  "version": "0.0.1",
+  "description": "The modern and simple resource pack editor",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/SanoHD/stonehenge"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "directory-tree": "^2.2.9",
+    "electron": "^12.0.5",
+    "fast-folder-size": "^1.2.0"
+  }
+}

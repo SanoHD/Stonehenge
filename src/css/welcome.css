@@ -1,0 +1,51 @@
+#window-welcome {
+	text-align: center;
+}
+
+#welcome-title {
+	text-align: center;
+}
+
+.welcome-choose {
+	display: inline-block;
+
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	box-shadow: 3px 3px 5px #aaa;
+
+	margin-top: 10%;
+	margin-left: auto;
+	margin-right: auto;
+
+	width: 20%;
+	height: 300px;
+
+	transition: 200ms;
+	cursor: pointer;
+}
+
+.welcome-choose:hover {
+	border: 1px solid #aaa;
+	box-shadow: 5px 5px 5px #888;
+}
+
+.welcome-choose-text {
+	display: grid;
+	text-align: center;
+	font-size: 50px;
+
+	margin-top: 100px;
+}
+
+.welcome-choose-text-small {
+	display: grid;
+	text-align: center;
+
+	font-size: 15px;
+	color: #bbb;
+}
+
+.welcome-choose-text-color {
+	opacity: 0.3;
+	color: #9aa;
+}
