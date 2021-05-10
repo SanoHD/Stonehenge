@@ -1,0 +1,46 @@
+{
+	"welcome_title": {
+		"en": "Welcome",
+		"de": "Willkommen"
+	},
+	"window_invalid": {
+		"en": "Invalid window :/",
+		"de": "Fehler beim Laden :/"
+	},
+	"window_general": {
+		"en": "General",
+		"de": "Allgemein"
+	},
+	"window_textures": {
+		"en": "Textures",
+		"de": "Texturen"
+	},
+	"window_items": {
+		"en": "Items",
+		"de": "Gegenstände"
+	},
+	"window_sounds": {
+		"en": "Sounds",
+		"de": "Geräusche"
+	},
+	"window_extras": {
+		"en": "Extras",
+		"de": "Zusätzliches"
+	},
+	"window_export": {
+		"en": "Export",
+		"de": "Exportieren"
+	},
+	"newpackpath": {
+		"en": "Choose a path for creating the new resource pack",
+		"de": "Wähle, wo das Resource-Pack erstellt werden soll"
+	},
+	"opentemplatepath": {
+		"en": "Open the unzipped template resource pack",
+		"de": "Öffne ein entpacktes Resource-Pack als Template"
+	},
+	"openpackpath": {
+		"en": "Open an existing unzipped resource pack",
+		"de": "Öffne ein existierendes, entpacktes Resource-Pack"
+	}
+}

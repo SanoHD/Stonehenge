@@ -21,6 +21,8 @@ var openedTexture = null;
 var filePath;
 var template;
 var content;
+var language = config["language"];
+var languageStrings = fsx.readJSONSync("language.json");
 
 var langFile = JSON.parse(fs.readFileSync("src\\en_us.json", "utf8", function(err) {
 	if (err) {
@@ -40,7 +42,19 @@ window.addEventListener("resize", function() {
 	}
 });
 
+function translate(val) {
+	let translation;
 
+	translation = languageStrings[val][language];
+
+	if (translation === undefined) {
+		translation = languageStrings[val]["en"];
+	}
+
+	return translation;
+}
+
+document.getElementById("welcome-title").innerHTML = translate("welcome_title");
 
 function toggleTextureSidebar(event, type, texturePath) {
 	let ts = document.getElementById("texture-sidebar");
@@ -246,7 +260,7 @@ function loadTextures() {
 	content.appendChild(textureContainer);
 }
 
-function toFilename(value) {
+function toFilename(value, raw=false) {
 	let newFileName = "";
 	for (var char of value.split("")) {
 		if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_".includes(char)) {
@@ -256,7 +270,11 @@ function toFilename(value) {
 		}
 	}
 
-	return "(Will be exported as " + newFileName + ".zip)";
+	if (raw) {
+		return newFileName;
+	} else {
+		return "(Will be exported as " + newFileName + ".zip)";
+	}
 }
 
 function generalChange(object, value) {
@@ -278,14 +296,22 @@ function generalChange(object, value) {
 function generalSaveChange(object, value) {
 	switch (object) {
 		case "name":
-			fsx.renameSync(packPath, path.parse(packPath)["dir"] + path.sep + value);
+			pack["name"] = value;
+			newPackPath = path.parse(packPath)["dir"] + path.sep + toFilename(value, raw=true);
+			fsx.renameSync(packPath, newPackPath);
+			packPath = newPackPath;
+
 			break;
 
 		case "description":
+			let description = value;
+			pack["description"] = description;
+
 			mcMetaFile = fs.readFileSync(packPath + path.sep + "pack.mcmeta", "utf8");
 			mcMeta = JSON.parse(mcMetaFile);
-			mcMeta["pack"]["description"] = value;
-			mcMetaFileString = JSON.stringify(mcMeta);
+			mcMeta["pack"]["description"] = description;
+
+			mcMetaFileString = JSON.stringify(mcMeta, null, 2);
 			fs.writeFileSync(packPath + path.sep + "pack.mcmeta", mcMetaFileString);
 
 			break;
@@ -360,19 +386,36 @@ function loadContent() {
 	let title = document.createElement("h1");
 	title.id = "title";
 	content.appendChild(title);
-	title.innerHTML = viewWindow;
 
 	switch (viewWindow) {
 		case "General":
+			title.innerHTML = translate("window_general");
 			loadGeneral();
 			break;
 
 		case "Textures":
-			loadTextures(0, 50);
+			title.innerHTML = translate("window_textures");
+			loadTextures();
+			break;
+
+		case "Items":
+			title.innerHTML = translate("window_items");
+			break;
+
+		case "Sounds":
+			title.innerHTML = translate("window_sounds");
+			break;
+
+		case "Extras":
+			title.innerHTML = translate("window_extras");
+			break;
+
+		case "Export":
+			title.innerHTML = translate("window_export");
 			break;
 
 		default:
-			title.innerHTML = "Invalid viewWindow";
+			title.innerHTML = translate("window_invalid");
 	}
 }
 
@@ -387,7 +430,7 @@ function loadWindow() {
 		let welcomeNewButton = document.getElementById("welcome-choose-new");
 		welcomeNewButton.addEventListener("click", function() {
 			filePath = dialog.showOpenDialogSync({
-				title: "Choose a path for the new resource pack",
+				title: translate("newpackpath"),
 				properties: ["openDirectory"],
 				defaultPath: "C:\\Users\\jonas\\Desktop\\Ordner\\ProgrammierZeug\\Electron\\Stonehenge\\projects"
 			})[0];
@@ -399,18 +442,16 @@ function loadWindow() {
 			} else {
 				filePath = filePath + "\\my-resource-pack";
 				pack = {
-					"name": "",
-					"description": "",
+					"name": "my-resource-pack",
+					"description": "Enter a description here!",
 					"version": ""
 				};
 
 				template = dialog.showOpenDialogSync({
-					title: "Choose the unzipped template resource pack",
+					title: translate("opentemplatepath"),
 					properties: ["openDirectory"],
 					defaultPath: "C:\\Users\\jonas\\Desktop\\Ordner\\ProgrammierZeug\\Electron\\Stonehenge\\templates\\Default-Texture-Pack-1.16.x"
 				})[0];
-
-				console.log(template, "--->", filePath);
 
 				packPath = filePath;
 
@@ -430,10 +471,10 @@ function loadWindow() {
 		let welcomeEditButton = document.getElementById("welcome-choose-edit");
 		welcomeEditButton.addEventListener("click", function() {
 			filePath = dialog.showOpenDialogSync({
-				title: "Open an existing unzipped resource pack",
+				title: translate("openpackpath"),
 				properties: ["openDirectory"],
 				defaultPath: "C:\\Users\\jonas\\Desktop\\Ordner\\ProgrammierZeug\\Electron\\Stonehenge\\projects"
-			})[0];
+			});
 
 			if (filePath === undefined) {
 				viewWindow = "Welcome";
@@ -441,6 +482,7 @@ function loadWindow() {
 				pack = {};
 
 			} else {
+				filePath = filePath[0];
 				mcMetaFile = fs.readFileSync(filePath + path.sep + "pack.mcmeta", "utf8");
 				mcMeta = JSON.parse(mcMetaFile);
 
