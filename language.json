@@ -3,6 +3,22 @@
 		"en": "Welcome",
 		"de": "Willkommen"
 	},
+	"welcome_create": {
+		"en": "Create {ICON}",
+		"de": "Erstelle {ICON}"
+	},
+	"welcome_edit": {
+		"en": "Edit {ICON}",
+		"de": "Bearbeite {ICON}"
+	},
+	"welcome_create_small": {
+		"en": "a new Resource Pack",
+		"de": "ein neues Resource-Pack"
+	},
+	"welcome_edit_small": {
+		"en": "an existing Resource Pack",
+		"de": "ein existierendes Resource-Pack"
+	},
 	"window_invalid": {
 		"en": "Invalid window :/",
 		"de": "Fehler beim Laden :/"
