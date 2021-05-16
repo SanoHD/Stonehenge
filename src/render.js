@@ -10,17 +10,25 @@ const path = require("path");
 
 var config = JSON.parse(fs.readFileSync("config.json", "utf8", function(err) {
 	if (err) {
-		console.log("AN ERROR OCCURRED WHILE TRYING TO OPEN en_us.json:", err);
+		console.log("AN ERROR OCCURRED WHILE TRYING TO OPEN config.json:", err);
 	}
 }));
 
+var shFile;
+
 var pack = {};
 var viewWindow = "Welcome";
+
 var packPath = null;
 var openedTexture = null;
+var loadedTextureFiles = [];
+var onlyShowLoadedTextures = false;
+
 var filePath;
+var templatePath;
 var template;
 var content;
+
 var language = config["language"];
 var languageStrings = fsx.readJSONSync("language.json");
 
@@ -143,6 +151,34 @@ function loadSidebarContent(texturePath) {
 	image.src = texturePath;
 
 
+
+	let loadButton = document.createElement("button");
+	loadButton.classList.add("sidebar-button");
+	loadButton.innerHTML = "Load";
+	if (loadedTextureFiles.includes(path.basename(texturePath))) {
+		loadButton.style.backgroundColor = "#ddd";
+		loadButton.style.cursor = "not-allowed";
+		loadButton.innerHTML = "Loaded";
+	} else {
+		loadButton.addEventListener("click", function() {
+			let blockName = path.basename(texturePath);
+			let oldBlockPath = texturePath;
+			let newBlockPath = packPath + "/assets/minecraft/textures/block/".replaceAll("/", path.sep) + blockName;
+
+			loadedTextureFiles.push(blockName);
+
+			console.log(oldBlockPath, "  --->  ", newBlockPath);
+
+			fsx.copySync(oldBlockPath, newBlockPath);
+
+			if (onlyShowLoadedTextures) {
+				loadTextures();
+			}
+
+			loadSidebarContent(texturePath);
+		});
+	}
+
 	let editButton = document.createElement("button");
 	editButton.classList.add("sidebar-button");
 	editButton.innerHTML = "Edit";
@@ -157,14 +193,14 @@ function loadSidebarContent(texturePath) {
 	replaceButton.addEventListener("click", function() {
 	});
 
-
 	ts.appendChild(title);
 	ts.appendChild(image);
+	ts.appendChild(loadButton);
 	ts.appendChild(editButton);
 	ts.appendChild(replaceButton);
 }
 
-function loadFiles(dirName=packPath) {
+function loadFiles(dirName) {
 	let files = dirTree(dirName + "/assets/minecraft/textures/block");
 	return files;
 }
@@ -208,7 +244,12 @@ function loadSelectors() {
 }
 
 function loadTextures() {
-	let content = document.getElementById("content-container");
+	// Remove sidebar
+	let sb = document.getElementById("texture-sidebar");
+	sb.innerHTML = "";
+	sb.style.display = "none";
+
+	content = document.getElementById("content-container");
 	content.innerHTML = "";
 
 	let textureContainer = document.createElement("div");
@@ -226,8 +267,8 @@ function loadTextures() {
 		}
 	}
 	*/
-
-	let textureFiles = loadFiles(packPath)["children"];
+	console.log("Template from:", pack["template"]);
+	let textureFiles = loadFiles(pack["template"])["children"];
 
 	textureFiles.forEach((texture, i) => {
 		texture = texture["path"].replaceAll("\\", "/");
@@ -290,6 +331,12 @@ function toFilename(value, raw=false) {
 	}
 }
 
+function updateSHFile() {
+	let shContent = JSON.stringify(pack, null, 2);
+
+	fs.writeFileSync(filePath + path.sep + ".stonehenge", shContent);
+}
+
 function generalChange(object, value) {
 	switch (object) {
 		case "name":
@@ -297,6 +344,9 @@ function generalChange(object, value) {
 
 			let packFilename = document.getElementById("pack-filename");
 			packFilename.innerHTML = toFilename(value);
+
+			filePath = path.dirname(filePath) + path.sep + toFilename(value, raw=true);
+
 			break;
 
 		case "description":
@@ -314,31 +364,43 @@ function generalSaveChange(object, value) {
 			fsx.renameSync(packPath, newPackPath);
 			packPath = newPackPath;
 
+			updateSHFile();
+
 			break;
 
 		case "description":
-			let description = value;
-			pack["description"] = description;
+			pack["description"] = value;
 
 			mcMetaFile = fs.readFileSync(packPath + path.sep + "pack.mcmeta", "utf8");
 			mcMeta = JSON.parse(mcMetaFile);
-			mcMeta["pack"]["description"] = description;
+			mcMeta["pack"]["description"] = pack["description"];
 
 			mcMetaFileString = JSON.stringify(mcMeta, null, 2);
 			fs.writeFileSync(packPath + path.sep + "pack.mcmeta", mcMetaFileString);
+
+			updateSHFile();
 
 			break;
 	}
 }
 
 function loadGeneral() {
+	var shFile = JSON.parse(fs.readFileSync(filePath + path.sep + ".stonehenge", "utf8", function(err) {
+		if (err) {
+			console.log("AN ERROR OCCURRED WHILE TRYING TO OPEN .stonehenge:", err);
+		}
+	}));
+
+	pack = shFile;
+
+
 	let packNameLabel = document.createElement("label");
 	let packDescriptionLabel = document.createElement("label");
 	let packIconLabel = document.createElement("label");
 
 	let packFilename = document.createElement("p");
 	packFilename.id = "pack-filename";
-	packFilename.value = toFilename(pack["name"]);
+	packFilename.value = pack["name"];
 
 	packNameLabel.classList.add("general-input-label");
 	packDescriptionLabel.classList.add("general-input-label");
@@ -368,6 +430,7 @@ function loadGeneral() {
 	});
 
 	packDescription.addEventListener("change", function(event) {
+		generalChange("description", event.target.value);
 		generalSaveChange("description", event.target.value);
 	});
 
@@ -455,28 +518,30 @@ function loadWindow() {
 			} else {
 				filePath = filePath + "\\my-resource-pack";
 
-				pack = {
-					"name": "my-resource-pack",
-					"description": "Enter a description here!",
-					"version": ""
-				};
-
 				template = dialog.showOpenDialogSync({
 					title: translate("opentemplatepath"),
 					properties: ["openDirectory"],
 					defaultPath: "C:\\Users\\jonas\\Desktop\\Ordner\\ProgrammierZeug\\Electron\\Stonehenge\\templates\\Default-Texture-Pack-1.16.x"
 				})[0];
 
+				pack = {
+					name: "my-resource-pack",
+					description: "Enter a description here!",
+					version: "",
+					template: template
+				};
+
+				fsx.mkdirSync(filePath);
+				fsx.mkdirsSync(filePath + "/assets/minecraft/textures/block".replaceAll("/", path.sep));
+
+				updateSHFile();
+
+				fsx.copySync(template + path.sep + "pack.mcmeta", filePath + path.sep + "pack.mcmeta");
+
+				templatePath = template;
 				packPath = filePath;
 
-				fsx.copy(template, filePath).then(function() {
-					viewWindow = "General";
-					clearInterval(loadingEllipsisInterval);
-					clearInterval(loadingPercentInterval);
-					loadWindow();
-				});
-
-				viewWindow = "Loading";
+				viewWindow = "General";
 				loadWindow();
 			}
 		});
@@ -506,78 +571,19 @@ function loadWindow() {
 					"version": ""
 				};
 
+				var shFile = JSON.parse(fs.readFileSync(filePath + path.sep + ".stonehenge", "utf8", function(err) {
+					if (err) {
+						console.log("AN ERROR OCCURRED WHILE TRYING TO OPEN .stonehenge:", err);
+					}
+				}));
+
 				packPath = filePath;
+				templatePath = pack["template"];
 				viewWindow = "General";
 
 				loadWindow();
 			}
 		});
-
-	} else if (viewWindow == "Loading") {
-		document.getElementById("window-loading").style.display = "inherit";
-
-		let ellipsis = ".";
-
-		let wl = document.getElementById("window-loading");
-		wl.innerHTML = "";
-
-		let text = document.createElement("p");
-		text.id = "loading-text";
-		text.innerHTML = "We are preparing everything.";
-
-		let subText = document.createElement("p");
-		subText.id = "loading-subtext";
-		subText.innerHTML = "0%";
-
-		wl.appendChild(text);
-		wl.appendChild(subText);
-
-		loadingEllipsisInterval = setInterval(function () {
-			text.innerHTML = "We are preparing everything" + ellipsis;
-			switch (ellipsis) {
-				case ".":
-					ellipsis = "..";
-					break;
-
-				case "..":
-					ellipsis = "...";
-					break;
-
-				default:
-					ellipsis = "."
-			}
-		}, 500);
-
-
-
-		var p1;
-		var p2;
-		loadingPercentInterval = setInterval(function () {
-			getFolderSize(filePath, function(err, bytes) {
-				if (err) {
-					console.error(err);
-				}
-
-				p1 = bytes;
-			});
-
-
-			getFolderSize(template, function(err, bytes) {
-				if (err) {
-					console.error(err);
-				}
-
-				p2 = bytes;
-			});
-
-			let percent = p1 / p2 * 100;
-			if (isNaN(percent)) {
-				subText.innerHTML = "0%";
-			} else {
-				subText.innerHTML = Math.floor(percent) + "%";
-			}
-
-		}, 1000);
 
 	} else {
 		document.getElementById("window-workspace").style.display = "inherit";
