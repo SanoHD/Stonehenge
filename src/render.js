@@ -305,6 +305,8 @@ function loadTextures() {
 	textureContainer.style.height = (window.innerHeight - 100) + "px";
 
 	let onlyShowLoadedTexturesSelector = document.createElement("select");
+	onlyShowLoadedTexturesSelector.style.padding = "2px";
+
 	let optionYes = document.createElement("option");
 	optionYes.innerHTML = translate("textureonlyshowloaded_yes");
 	optionYes.value = "yes";
