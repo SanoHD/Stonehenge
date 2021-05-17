@@ -12,8 +12,15 @@ exports.loadTextureFiles = function() {
 	}
 }
 
-exports.checkTextureLoaded = function(textureElement) {
-	let src_ = textureElement.getElementsByTagName("p")[0].title;
+exports.checkTextureLoaded = function(textureElement, isFilename=false) {
+	let src_ = null;
+	
+	if (isFilename) {
+		src_ = textureElement;
+	} else {
+		src_ = textureElement.getElementsByTagName("p")[0].title;
+	}
+
 	return loadedTextureFiles.includes(path.basename(src_));
 }
 
