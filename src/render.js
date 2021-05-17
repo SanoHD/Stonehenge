@@ -128,11 +128,7 @@ function toggleTextureSidebar(event, type, texturePath) {
 
 	// Reset select-color of all textures available
 	for (var t of document.getElementsByClassName("texture")) {
-		if (checkTextureLoaded(t)) {
-			t.style.backgroundColor = "#fff";
-		} else {
-			t.getElementsByClassName("texture-loaded-text")[0].style.color = "#ddd";
-		}
+		t.style.backgroundColor = "#fff";
 	}
 
 	if (open) {
