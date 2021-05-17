@@ -62,6 +62,7 @@ var filePath;
 var templatePath;
 var template;
 var content;
+var rootDir = path.dirname(__dirname);
 
 var language = config["language"];
 var languageStrings = fsx.readJSONSync("language.json");

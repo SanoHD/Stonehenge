@@ -11,7 +11,7 @@ exports.loadWindow = function() {
 			filePath = dialog.showOpenDialogSync({
 				title: translate("newpackpath"),
 				properties: ["openDirectory"],
-				defaultPath: path.dirname(__dirname) + path.sep + "projects"
+				defaultPath: rootDir + path.sep + "projects"
 			})[0];
 
 			if (filePath === undefined) {
@@ -24,7 +24,7 @@ exports.loadWindow = function() {
 				template = dialog.showOpenDialogSync({
 					title: translate("opentemplatepath"),
 					properties: ["openDirectory"],
-					defaultPath: path.dirname(__dirname) + path.sep + "templates" + path.sep + "Default-Texture-Pack-1.16.x"
+					defaultPath: rootDir + path.sep + "templates" + path.sep + "Default-Texture-Pack-1.16.x"
 				})[0];
 
 				pack = {
@@ -50,14 +50,12 @@ exports.loadWindow = function() {
 			}
 		});
 
-
 		let welcomeEditButton = document.getElementById("welcome-choose-edit");
 		welcomeEditButton.addEventListener("click", function() {
-			console.log(path.basename(__dirname) + path.sep + "projects")
 			filePath = dialog.showOpenDialogSync({
 				title: translate("openpackpath"),
 				properties: ["openDirectory"],
-				defaultPath: path.dirname(__dirname) + path.sep + "projects"
+				defaultPath: rootDir + path.sep + "projects"
 			});
 
 			if (filePath === undefined) {
