@@ -1,7 +1,6 @@
 const spawn = require("child_process").execSync;
 const dialog = require("electron").remote.dialog;
 const dirTree = require("directory-tree");
-//const getFolderSize = require("fast-folder-size");
 const fs = require("fs");
 const fsx = require("fs-extra");
 const path = require("path");
