@@ -11,3 +11,13 @@ exports.loadTextureFiles = function() {
 		loadedTextureFiles.push(tf["name"]);
 	}
 }
+
+exports.checkTextureLoaded = function(textureElement) {
+	let src_ = textureElement.getElementsByTagName("p")[0].title;
+	return loadedTextureFiles.includes(path.basename(src_));
+}
+
+exports.loadFiles = function(dirName) {
+	let files = dirTree(dirName + "/assets/minecraft/textures/block");
+	return files;
+}
