@@ -194,9 +194,13 @@ function loadSidebarContent(texturePath) {
 		loadButton.style.cursor = "not-allowed";
 		loadButton.innerHTML = "Loaded";
 
+		let imgPath = packPath + "/assets/minecraft/textures/block/".replaceAll("/", path.sep) + path.basename(texturePath);
+
 		editButton.addEventListener("click", function() {
-			let cmd = config["editors"]["texture"].replace("%s", "\"" + texturePath.replaceAll("/", "\\") + "\"");
+			let cmd = config["editors"]["texture"].replace("%s", "\"" + imgPath + "\"");
 			let shell = spawn(cmd);
+			loadTextureFiles();
+			loadTextures();
 		});
 
 		replaceButton.addEventListener("click", function() {
@@ -275,11 +279,11 @@ function loadSelectors() {
 			selectionBox.style.borderTopRightRadius = "5px";
 		}
 
-		selectionBox.onclick = function() {
+		selectionBox.addEventListener("click", function() {
 			viewWindow = selection;
 			loadSelectors();
 			loadContent();
-		}
+		});
 
 		// Add to parent
 		cs.appendChild(selectionBox);
@@ -363,7 +367,6 @@ function loadTextures() {
 
 		if (!loadedTextureFiles.includes(path.basename(texture))) {
 			if (onlyShowLoadedTextures) {
-				console.log("THIS ONE IS NOT LOADED");
 				return;
 			}
 			singleTextureLoadedText.style.color = "#ddd";
@@ -386,6 +389,7 @@ function loadTextures() {
 		// Change source of texture image from template to resource pack, if texture is loaded
 		if (loadedTextureFiles.includes(path.basename(texture))) {
 			singleTextureImage.src = packPath + "/assets/minecraft/textures/block/".replaceAll("/", path.sep) + path.basename(texture);
+			console.log("YES:", singleTextureImage.src);
 		} else {
 			singleTextureImage.src = texture;
 		}
@@ -428,6 +432,14 @@ function toFilename(value, raw=false) {
 		return newFileName;
 	} else {
 		return "(Will be exported as " + newFileName + ".zip)";
+	}
+}
+
+function loadTextureFiles() {
+	loadedTextureFiles = []
+	let _loadedTextureFiles = loadFiles(packPath)["children"];
+	for (var tf of _loadedTextureFiles) {
+		loadedTextureFiles.push(tf["name"]);
 	}
 }
 
@@ -683,11 +695,7 @@ function loadWindow() {
 				templatePath = pack["template"];
 				viewWindow = windowEnum.GENERAL;
 
-				loadedTextureFiles = []
-				let _loadedTextureFiles = loadFiles(packPath)["children"];
-				for (var tf of _loadedTextureFiles) {
-					loadedTextureFiles.push(tf["name"]);
-				}
+				loadTextureFiles();
 
 				loadWindow();
 			}
