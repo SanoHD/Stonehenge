@@ -94,8 +94,8 @@
 
 	margin: 5px;
 
-	width: 160px;
-	height: 250px;
+	width: 130px;
+	height: 220px;
 
 	cursor: pointer;
 
@@ -119,7 +119,7 @@
 
 	margin: 3px auto 0px auto;
 
-	height: 150px;
+	height: 125px;
 
 	transition: 100ms;
 }
