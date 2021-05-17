@@ -382,13 +382,24 @@ function loadTextures() {
 		// Image of texture
 		let singleTextureImage = document.createElement("img");
 		singleTextureImage.classList.add("texture-image");
-		singleTextureImage.src = texture;
+
+		// Change source of texture image from template to resource pack, if texture is loaded
+		if (loadedTextureFiles.includes(path.basename(texture))) {
+			singleTextureImage.src = packPath + "/assets/minecraft/textures/block/".replaceAll("/", path.sep) + path.basename(texture);
+		} else {
+			singleTextureImage.src = texture;
+		}
 
 		// Title of texture
 		let singleTextureTitle = document.createElement("p");
 		singleTextureTitle.classList.add("texture-title");
 		singleTextureTitle.innerHTML = path.basename(texture);
-		singleTextureTitle.title = texture;
+
+		if (loadedTextureFiles.includes(path.basename(texture))) {
+			singleTextureTitle.title = packPath + "/assets/minecraft/textures/block/".replaceAll("/", path.sep) + path.basename(texture);
+		} else {
+			singleTextureTitle.title = texture;
+		}
 
 		// Add image and title to parent
 		singleTextureContainer.appendChild(singleTextureImage);
