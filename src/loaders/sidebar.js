@@ -10,7 +10,7 @@ exports.loadSidebarContent = function(texturePath) {
 
 	// The name of the block displayed above the texture in the sidebar
 	// Create name with filenameToBlockName()
-	title.innerHTML = texts.filenameToBlockName(path.basename(textureNameNoExtension));
+	title.innerHTML = filenameToBlockName(path.basename(textureNameNoExtension));
 
 	// Add the image
 	let image = document.createElement("img");

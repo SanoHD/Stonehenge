@@ -12,8 +12,10 @@ exports.loadTextures = function() {
 	textureContainer.id = "textures";
 	textureContainer.style.height = (window.innerHeight - 100) + "px";
 
+
+
 	let onlyShowLoadedTexturesSelector = document.createElement("select");
-	onlyShowLoadedTexturesSelector.style.padding = "2px";
+	onlyShowLoadedTexturesSelector.id = "textures-show-select";
 
 	let optionYes = document.createElement("option");
 	optionYes.innerHTML = translate("textureonlyshowloaded_yes");
@@ -45,6 +47,25 @@ exports.loadTextures = function() {
 	content.appendChild(onlyShowLoadedTexturesSelector);
 
 
+
+	let textureSearch = document.createElement("input");
+	textureSearch.id = "texture-search";
+	textureSearch.placeholder = "Search for blocks";
+
+	textureSearch.addEventListener("change", function(event) {
+		textureSearchText = event.target.value;
+		textureAfterSearch = true;
+		loadTextures();
+	});
+
+	textureSearch.addEventListener("input", function(event) {
+		if (event.target.value.length == 0) {
+			loadTextures();
+		}
+	});
+
+	content.appendChild(textureSearch);
+
 	/*
 	textureContainer.onscroll = function() {
 		let scrollPercent = textureContainer.scrollTop / (textureContainer.scrollHeight - textureContainer.clientHeight);
@@ -55,6 +76,7 @@ exports.loadTextures = function() {
 		}
 	}
 	*/
+
 	console.log("Template from:", pack["template"]);
 	let textureFiles = loadFiles(pack["template"])["children"];
 
@@ -73,11 +95,40 @@ exports.loadTextures = function() {
 		singleTextureLoadedText.classList.add("texture-loaded-text");
 		singleTextureLoadedText.innerHTML = "Loaded";
 
-		if (!loadedTextureFiles.includes(path.basename(texture))) {
+		if (checkTextureLoaded(texture, isFilename=true)) {
+			singleTextureLoadedText.style.color = "#3bbf65";
+		} else {
+			singleTextureLoadedText.style.color = "#ddd";
+		}
+
+		if ((textureSearchText != null && textureSearchText.length != 0) || textureAfterSearch) {
+			if (textureAfterSearch) {
+				textureAfterSearch = false;
+			}
+
+			if (path.basename(texture).includes(textureSearchText)) {
+				if (onlyShowLoadedTextures) {
+					if (checkTextureLoaded(texture, isFilename=true)) {
+						// Use the texture
+					} else {
+						// Don't use the texture
+						return;
+					}
+				} else {
+					// Use the texture
+				}
+			} else {
+				// Don't use the texture
+				return;
+			}
+
+		} else if (!loadedTextureFiles.includes(path.basename(texture))) {
+			// texture is not loaded
 			if (onlyShowLoadedTextures) {
 				return;
 			}
-			singleTextureLoadedText.style.color = "#ddd";
+
+
 		}
 
 		// Add fade-in animation for the first 100 textures
