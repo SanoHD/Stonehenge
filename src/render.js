@@ -599,7 +599,7 @@ function loadWindow() {
 			filePath = dialog.showOpenDialogSync({
 				title: translate("newpackpath"),
 				properties: ["openDirectory"],
-				defaultPath: "C:\\Users\\jonas\\Desktop\\Ordner\\ProgrammierZeug\\Electron\\Stonehenge\\projects"
+				defaultPath: path.dirname(__dirname) + path.sep + "projects"
 			})[0];
 
 			if (filePath === undefined) {
@@ -612,7 +612,7 @@ function loadWindow() {
 				template = dialog.showOpenDialogSync({
 					title: translate("opentemplatepath"),
 					properties: ["openDirectory"],
-					defaultPath: "C:\\Users\\jonas\\Desktop\\Ordner\\ProgrammierZeug\\Electron\\Stonehenge\\templates\\Default-Texture-Pack-1.16.x"
+					defaultPath: path.dirname(__dirname) + path.sep + "templates" + path.sep + "Default-Texture-Pack-1.16.x"
 				})[0];
 
 				pack = {
@@ -640,10 +640,11 @@ function loadWindow() {
 
 		let welcomeEditButton = document.getElementById("welcome-choose-edit");
 		welcomeEditButton.addEventListener("click", function() {
+			console.log(path.basename(__dirname) + path.sep + "projects")
 			filePath = dialog.showOpenDialogSync({
 				title: translate("openpackpath"),
 				properties: ["openDirectory"],
-				defaultPath: "C:\\Users\\jonas\\Desktop\\Ordner\\ProgrammierZeug\\Electron\\Stonehenge\\projects"
+				defaultPath: path.dirname(__dirname) + path.sep + "projects"
 			});
 
 			if (filePath === undefined) {
