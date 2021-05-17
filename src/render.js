@@ -637,6 +637,7 @@ function loadWindow() {
 				updateSHFile();
 
 				fsx.copySync(template + path.sep + "pack.mcmeta", filePath + path.sep + "pack.mcmeta");
+				fsx.copySync(template + path.sep + "pack.mcmeta", filePath + path.sep + "pack.mcmeta");
 
 				templatePath = template;
 				packPath = filePath;
