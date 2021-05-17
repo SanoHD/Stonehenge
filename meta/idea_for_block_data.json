@@ -1,0 +1,11 @@
+[
+	{
+		"name": {
+			"en": "Acacia Log"
+		},
+		"id": "minecraft:acacia_log",
+		"texture": "whatever.png",
+		"class": "log",
+		"type": "acacia"
+	}
+]

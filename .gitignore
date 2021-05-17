@@ -1,6 +1,4 @@
 node_modules/*
 templates/*
 projects/*
-todo.md
-blocks.json
 package-lock.json
