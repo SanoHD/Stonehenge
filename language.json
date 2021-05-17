@@ -58,5 +58,13 @@
 	"openpackpath": {
 		"en": "Open an existing unzipped resource pack",
 		"de": "Öffne ein existierendes, entpacktes Resource-Pack"
+	},
+	"textureonlyshowloaded_yes": {
+		"en": "Only show loaded textures",
+		"de": "Nur geladene Texturen anzeigen"
+	},
+	"textureonlyshowloaded_no": {
+		"en": "Show all textures",
+		"de": "Alle Texturen anzeigen"
 	}
 }

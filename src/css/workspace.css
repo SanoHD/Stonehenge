@@ -9,10 +9,10 @@
 	border-collapse: collapse;
 	border-spacing: 0px;
 
-	padding: 5px;
+	padding: 10px;
 	margin-bottom: 0;
 
-	width: 70px;
+	width: 80px;
 	cursor: pointer;
 }
 
@@ -134,10 +134,26 @@
 }
 
 .texture-title {
+	display: block;
+	text-align: center;
+	font-size: 16px;
+
+	height: 25px;
+
+	margin-bottom: 0px;
+
+	word-break: break-all;
+}
+
+.texture-loaded-text {
 	display: inline-flex;
 	text-align: center;
-	font-size: 14px;
 
+	color: #3bbf65;
+
+	font-size: 12px;
+
+	margin-bottom: 10px;
 	word-break: break-all;
 }
 

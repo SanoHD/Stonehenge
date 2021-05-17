@@ -1,11 +1,21 @@
 const spawn = require("child_process").execSync;
 const dialog = require("electron").remote.dialog;
 const dirTree = require("directory-tree");
-const getFolderSize = require("fast-folder-size");
+//const getFolderSize = require("fast-folder-size");
 const fs = require("fs");
 const fsx = require("fs-extra");
 const path = require("path");
 
+
+const windowEnum = {
+	WELCOME: "WELCOME",
+	GENERAL: "GENERAL",
+	TEXTURES: "TEXTURES",
+	ITEMS: "ITEMS",
+	SOUNDS: "SOUNDS",
+	EXTRAS: "EXTRAS",
+	EXPORT: "EXPORT"
+};
 
 
 var config = JSON.parse(fs.readFileSync("config.json", "utf8", function(err) {
@@ -17,7 +27,7 @@ var config = JSON.parse(fs.readFileSync("config.json", "utf8", function(err) {
 var shFile;
 
 var pack = {};
-var viewWindow = "Welcome";
+var viewWindow = windowEnum.WELCOME;
 
 var packPath = null;
 var openedTexture = null;
@@ -45,12 +55,23 @@ if (langFile === undefined) {
 
 
 window.addEventListener("resize", function() {
-	if (viewWindow == "Textures") {
+	if (viewWindow == windowEnum.TEXTURES) {
 		document.getElementById("textures").style.height = (window.innerHeight - 100) + "px";
 	}
 });
 
 function translate(val) {
+	if (val in windowEnum) {
+		val = {
+			GENERAL: "window_general",
+			TEXTURES: "window_textures",
+			ITEMS: "window_items",
+			SOUNDS: "window_sounds",
+			EXTRAS: "window_extras",
+			EXPORT: "window_export"
+		}[val];
+	}
+
 	let translation;
 
 	translation = languageStrings[val][language];
@@ -77,6 +98,12 @@ smallTextCreate.innerHTML = translate("welcome_create_small");
 smallTextEdit.innerHTML = translate("welcome_edit_small");
 
 
+
+function checkTextureLoaded(textureElement) {
+	let src_ = textureElement.getElementsByTagName("p")[0].title;
+	return loadedTextureFiles.includes(path.basename(src_));
+}
+
 function toggleTextureSidebar(event, type, texturePath) {
 	let ts = document.getElementById("texture-sidebar");
 	let et = event.target;
@@ -102,7 +129,11 @@ function toggleTextureSidebar(event, type, texturePath) {
 
 	// Reset select-color of all textures available
 	for (var t of document.getElementsByClassName("texture")) {
-		t.style.backgroundColor = "#fff";
+		if (checkTextureLoaded(t)) {
+			t.style.backgroundColor = "#fff";
+		} else {
+			t.getElementsByClassName("texture-loaded-text")[0].style.color = "#ddd";
+		}
 	}
 
 	if (open) {
@@ -151,21 +182,52 @@ function loadSidebarContent(texturePath) {
 	image.src = texturePath;
 
 
+	let editButton = document.createElement("button");
+	editButton.classList.add("sidebar-button");
+	editButton.innerHTML = "Edit";
+
+	let replaceButton = document.createElement("button");
+	replaceButton.classList.add("sidebar-button");
+	replaceButton.innerHTML = "Replace";
 
 	let loadButton = document.createElement("button");
 	loadButton.classList.add("sidebar-button");
 	loadButton.innerHTML = "Load";
 	if (loadedTextureFiles.includes(path.basename(texturePath))) {
+		// Texture is loaded
 		loadButton.style.backgroundColor = "#ddd";
 		loadButton.style.cursor = "not-allowed";
 		loadButton.innerHTML = "Loaded";
+
+		editButton.addEventListener("click", function() {
+			let cmd = config["editors"]["texture"].replace("%s", "\"" + texturePath.replaceAll("/", "\\") + "\"");
+			let shell = spawn(cmd);
+		});
+
+		replaceButton.addEventListener("click", function() {
+		});
 	} else {
+		// Texture is not loaded
+		for (var button of [editButton, replaceButton]) {
+			button.style.backgroundColor = "#ddd";
+			button.style.cursor = "not-allowed";
+		}
+
 		loadButton.addEventListener("click", function() {
 			let blockName = path.basename(texturePath);
 			let oldBlockPath = texturePath;
 			let newBlockPath = packPath + "/assets/minecraft/textures/block/".replaceAll("/", path.sep) + blockName;
 
 			loadedTextureFiles.push(blockName);
+
+
+			for (var t of document.getElementById("textures").getElementsByTagName("div")) {
+				if (checkTextureLoaded(t)) {
+					t.getElementsByClassName("texture-loaded-text")[0].style.color = "#3bbf65";
+				} else {
+					t.getElementsByClassName("texture-loaded-text")[0].style.color = "#ddd";
+				}
+			}
 
 			console.log(oldBlockPath, "  --->  ", newBlockPath);
 
@@ -178,20 +240,6 @@ function loadSidebarContent(texturePath) {
 			loadSidebarContent(texturePath);
 		});
 	}
-
-	let editButton = document.createElement("button");
-	editButton.classList.add("sidebar-button");
-	editButton.innerHTML = "Edit";
-	editButton.addEventListener("click", function() {
-		let cmd = config["editors"]["texture"].replace("%s", "\"" + texturePath.replaceAll("/", "\\") + "\"");
-		let shell = spawn(cmd);
-	});
-
-	let replaceButton = document.createElement("button");
-	replaceButton.classList.add("sidebar-button");
-	replaceButton.innerHTML = "Replace";
-	replaceButton.addEventListener("click", function() {
-	});
 
 	ts.appendChild(title);
 	ts.appendChild(image);
@@ -209,12 +257,12 @@ function loadSelectors() {
 	let cs = document.getElementById("content-selectors");
 	cs.innerHTML = "";
 
-	let boxes = ["General", "Textures", "Items", "Sounds", "Extras"];
+	let boxes = [windowEnum.GENERAL, windowEnum.TEXTURES, windowEnum.ITEMS, windowEnum.SOUNDS, windowEnum.EXTRAS, windowEnum.EXPORT];
 	for (var i in boxes) {
 		let selection = boxes[i];
 
 		let selectionBox = document.createElement("p");
-		selectionBox.innerHTML = selection;
+		selectionBox.innerHTML = translate(selection);
 		selectionBox.classList.add("single-content-selector");
 
 		// If selected
@@ -257,6 +305,37 @@ function loadTextures() {
 	textureContainer.id = "textures";
 	textureContainer.style.height = (window.innerHeight - 100) + "px";
 
+	let onlyShowLoadedTexturesSelector = document.createElement("select");
+	let optionYes = document.createElement("option");
+	optionYes.innerHTML = translate("textureonlyshowloaded_yes");
+	optionYes.value = "yes";
+
+	let optionNo = document.createElement("option");
+	optionNo.innerHTML = translate("textureonlyshowloaded_no");
+	optionNo.value = "no";
+
+	onlyShowLoadedTexturesSelector.appendChild(optionYes);
+	onlyShowLoadedTexturesSelector.appendChild(optionNo);
+
+	onlyShowLoadedTexturesSelector.addEventListener("input", function(event) {
+		if (event.target.value == "yes") {
+			onlyShowLoadedTextures = true;
+		} else {
+			onlyShowLoadedTextures = false;
+		}
+
+		loadTextures();
+	})
+
+	if (onlyShowLoadedTextures) {
+		onlyShowLoadedTexturesSelector.value = "yes";
+	} else {
+		onlyShowLoadedTexturesSelector.value = "no";
+	}
+
+	content.appendChild(onlyShowLoadedTexturesSelector);
+
+
 	/*
 	textureContainer.onscroll = function() {
 		let scrollPercent = textureContainer.scrollTop / (textureContainer.scrollHeight - textureContainer.clientHeight);
@@ -281,8 +360,20 @@ function loadTextures() {
 		let singleTextureContainer = document.createElement("div");
 		singleTextureContainer.classList.add("texture");
 
-		// Add fade-in animation for the first 50 textures
-		if (i <= 50) {
+		let singleTextureLoadedText = document.createElement("p");
+		singleTextureLoadedText.classList.add("texture-loaded-text");
+		singleTextureLoadedText.innerHTML = "Loaded";
+
+		if (!loadedTextureFiles.includes(path.basename(texture))) {
+			if (onlyShowLoadedTextures) {
+				console.log("THIS ONE IS NOT LOADED");
+				return;
+			}
+			singleTextureLoadedText.style.color = "#ddd";
+		}
+
+		// Add fade-in animation for the first 100 textures
+		if (i <= 100) {
 			singleTextureContainer.style.animationDelay = (i * 15) + "ms";
 		}
 
@@ -305,6 +396,7 @@ function loadTextures() {
 		// Add image and title to parent
 		singleTextureContainer.appendChild(singleTextureImage);
 		singleTextureContainer.appendChild(singleTextureTitle);
+		singleTextureContainer.appendChild(singleTextureLoadedText);
 
 		// Add container to all textures
 		textureContainer.appendChild(singleTextureContainer);
@@ -464,29 +556,29 @@ function loadContent() {
 	content.appendChild(title);
 
 	switch (viewWindow) {
-		case "General":
+		case windowEnum.GENERAL:
 			title.innerHTML = translate("window_general");
 			loadGeneral();
 			break;
 
-		case "Textures":
+		case windowEnum.TEXTURES:
 			title.innerHTML = translate("window_textures");
 			loadTextures();
 			break;
 
-		case "Items":
+		case windowEnum.ITEMS:
 			title.innerHTML = translate("window_items");
 			break;
 
-		case "Sounds":
+		case windowEnum.SOUNDS:
 			title.innerHTML = translate("window_sounds");
 			break;
 
-		case "Extras":
+		case windowEnum.EXTRAS:
 			title.innerHTML = translate("window_extras");
 			break;
 
-		case "Export":
+		case windowEnum.EXPORT:
 			title.innerHTML = translate("window_export");
 			break;
 
@@ -500,7 +592,7 @@ function loadWindow() {
 	document.getElementById("window-loading").style.display = "none";
 	document.getElementById("window-workspace").style.display = "none";
 
-	if (viewWindow == "Welcome") {
+	if (viewWindow == windowEnum.WELCOME) {
 		document.getElementById("window-welcome").style.display = "inherit";
 
 		let welcomeNewButton = document.getElementById("welcome-choose-new");
@@ -541,7 +633,7 @@ function loadWindow() {
 				templatePath = template;
 				packPath = filePath;
 
-				viewWindow = "General";
+				viewWindow = windowEnum.GENERAL;
 				loadWindow();
 			}
 		});
@@ -556,7 +648,7 @@ function loadWindow() {
 			});
 
 			if (filePath === undefined) {
-				viewWindow = "Welcome";
+				viewWindow = windowEnum.WELCOME;
 				loadWindow();
 				pack = {};
 
@@ -579,7 +671,13 @@ function loadWindow() {
 
 				packPath = filePath;
 				templatePath = pack["template"];
-				viewWindow = "General";
+				viewWindow = windowEnum.GENERAL;
+
+				loadedTextureFiles = []
+				let _loadedTextureFiles = loadFiles(packPath)["children"];
+				for (var tf of _loadedTextureFiles) {
+					loadedTextureFiles.push(tf["name"]);
+				}
 
 				loadWindow();
 			}
