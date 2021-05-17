@@ -41,17 +41,6 @@ var content;
 var language = config["language"];
 var languageStrings = fsx.readJSONSync("language.json");
 
-var langFile = JSON.parse(fs.readFileSync("src\\en_us.json", "utf8", function(err) {
-	if (err) {
-		console.log("AN ERROR OCCURRED WHILE TRYING TO OPEN en_us.json:", err);
-	}
-}));
-
-if (langFile === undefined) {
-	langFile = {};
-}
-
-
 
 window.addEventListener("resize", function() {
 	if (viewWindow == windowEnum.TEXTURES) {
@@ -101,6 +90,57 @@ smallTextEdit.innerHTML = translate("welcome_edit_small");
 function checkTextureLoaded(textureElement) {
 	let src_ = textureElement.getElementsByTagName("p")[0].title;
 	return loadedTextureFiles.includes(path.basename(src_));
+}
+
+function filenameToBlockName(fn) {
+	console.log("FROM", "'" + fn + "'");
+
+	let parts = [];
+	let singlePart = "";
+	for (var char of fn.split("")) {
+		if (char == "_") {
+			parts.push(singlePart);
+			singlePart = "";
+
+		} else if (!isNaN(char)) {
+			// Digit
+			if (!isNaN(singlePart)) {
+				// If already a number, add digit
+				singlePart += char;
+			} else {
+				// If already a text, push and add char
+				parts.push(singlePart);
+				singlePart = char;
+			}
+
+		} else {
+			// Char
+			if (!isNaN(singlePart)) {
+				// If already a number, push and add digit
+				parts.push(singlePart);
+				singlePart = char;
+			} else {
+				// If already a text, add char
+				singlePart += char;
+			}
+		}
+	}
+
+	parts.push(singlePart);
+
+	console.log(parts);
+
+	parts = parts.filter(e => {
+		return e != "";
+	});
+
+	for (var i in parts) {
+		parts[i] = parts[i][0].toUpperCase() + parts[i].substr(1);
+	}
+
+	console.log(parts);
+
+	return parts.join(" ");
 }
 
 function toggleTextureSidebar(event, type, texturePath) {
@@ -158,6 +198,7 @@ function toggleTextureSidebar(event, type, texturePath) {
 
 function loadSidebarContent(texturePath) {
 	let ts = document.getElementById("texture-sidebar");
+	// Clear content first
 	ts.innerHTML = "";
 
 	textureNameNoExtension = texturePath.slice(0, -4);
@@ -165,26 +206,26 @@ function loadSidebarContent(texturePath) {
 	let title = document.createElement("h1");
 	title.id = "sidebar-texture-title";
 
-	if ("block.minecraft." + path.basename(textureNameNoExtension) in langFile) {
-		title.innerHTML = langFile["block.minecraft." + path.basename(textureNameNoExtension)];
-	} else {
-		title.innerHTML = path.basename(texturePath);
-	}
+	// The name of the block displayed above the texture in the sidebar
+	// Create name with filenameToBlockName()
+	title.innerHTML = filenameToBlockName(path.basename(textureNameNoExtension));
 
-
+	// Add the image
 	let image = document.createElement("img");
 	image.id = "sidebar-texture-image";
 	image.src = texturePath;
 
-
+	// Add the 'edit' button
 	let editButton = document.createElement("button");
 	editButton.classList.add("sidebar-button");
 	editButton.innerHTML = "Edit";
 
+	// Add the 'replace' button
 	let replaceButton = document.createElement("button");
 	replaceButton.classList.add("sidebar-button");
 	replaceButton.innerHTML = "Replace";
 
+	// Add the 'load' button
 	let loadButton = document.createElement("button");
 	loadButton.classList.add("sidebar-button");
 	loadButton.innerHTML = "Load";
@@ -389,7 +430,6 @@ function loadTextures() {
 		// Change source of texture image from template to resource pack, if texture is loaded
 		if (loadedTextureFiles.includes(path.basename(texture))) {
 			singleTextureImage.src = packPath + "/assets/minecraft/textures/block/".replaceAll("/", path.sep) + path.basename(texture);
-			console.log("YES:", singleTextureImage.src);
 		} else {
 			singleTextureImage.src = texture;
 		}
