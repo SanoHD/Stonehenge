@@ -249,3 +249,30 @@
 
 	margin-top: 0;
 }
+
+#export-button {
+	font-size: 30px;
+
+	color: white;
+	background-color: #32e23e;
+	border: 2px solid #138a1b;
+	border-radius: 10px;
+	box-shadow: none;
+
+	width: 15%;
+
+	padding: 10px;
+	margin: 50px;
+
+	cursor: pointer;
+	transition: 200ms;
+}
+
+#export-button:hover {
+	box-shadow: 3px 5px 2px #238629
+}
+
+#export-button:active {
+	background-color: #2ed439;
+	transition: 100ms;
+}

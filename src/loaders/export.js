@@ -2,6 +2,9 @@ exports.loadExport = function () {
 	let exportButton = document.createElement("p");
 	exportButton.id = "export-button";
 	exportButton.innerHTML = translate("export_button_text");
+	exportButton.addEventListener("hover", function() {
+		exportButton.style.animationDuration = "100ms";
+	});
 
 	exportButton.addEventListener("click", function() {
 		exportPath = dialog.showOpenDialogSync({
