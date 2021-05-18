@@ -38,6 +38,7 @@ var updateSHFile = utilsUtils.updateSHFile;
 var loadTextureFiles = utilsUtils.loadTextureFiles;
 var checkTextureLoaded = utilsUtils.checkTextureLoaded;
 var loadFiles = utilsUtils.loadFiles;
+var cursor = utilsUtils.cursor;
 
 const windowEnum = utilsEnums.windowEnum;
 
@@ -58,7 +59,6 @@ var openedTexture = null;
 var loadedTextureFiles = [];
 var onlyShowLoadedTextures = false;
 var textureSearchText = null;
-var textureAfterSearch = false;  // true to reset search
 
 var filePath;
 var templatePath;

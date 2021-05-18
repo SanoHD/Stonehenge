@@ -14,7 +14,7 @@ exports.loadTextureFiles = function() {
 
 exports.checkTextureLoaded = function(textureElement, isFilename=false) {
 	let src_ = null;
-	
+
 	if (isFilename) {
 		src_ = textureElement;
 	} else {
@@ -27,4 +27,16 @@ exports.checkTextureLoaded = function(textureElement, isFilename=false) {
 exports.loadFiles = function(dirName) {
 	let files = dirTree(dirName + "/assets/minecraft/textures/block");
 	return files;
+}
+
+exports.cursor = function(type) {
+	switch (type) {
+		case "normal":
+			document.body.style.cursor = "default";
+			break;
+
+		case "loading":
+			document.body.style.cursor = "wait";
+			break;
+	}
 }

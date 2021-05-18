@@ -15,6 +15,7 @@ exports.loadContent = function() {
 
 		case windowEnum.TEXTURES:
 			title.innerHTML = translate("window_textures");
+			cursor("loading");
 			loadTextures();
 			break;
 
