@@ -66,5 +66,9 @@
 	"textureonlyshowloaded_no": {
 		"en": "Show all textures",
 		"de": "Alle Texturen anzeigen"
+	},
+	"textures_search_placeholder": {
+		"en": "Search for block textures",
+		"de": "Nach Block-Texturen suchen"
 	}
 }

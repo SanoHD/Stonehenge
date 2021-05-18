@@ -50,7 +50,7 @@ exports.loadTextures = function() {
 
 	let textureSearch = document.createElement("input");
 	textureSearch.id = "texture-search";
-	textureSearch.placeholder = "Search for blocks";
+	textureSearch.placeholder = translate("textures_search_placeholder");
 	textureSearch.value = textureSearchText;
 
 	let textureSearchClose = document.createElement("p");
@@ -99,6 +99,7 @@ exports.loadTextures = function() {
 	console.log("Template from:", pack["template"]);
 	let textureFiles = loadFiles(pack["template"])["children"];
 
+	let realCount = -1;
 	textureFiles.forEach((texture, i) => {
 		texture = texture["path"].replaceAll("\\", "/");
 
@@ -146,10 +147,10 @@ exports.loadTextures = function() {
 
 		}
 
-		// Add fade-in animation for the first 100 textures
-		if (i <= 100) {
-			singleTextureContainer.style.animationDelay = (i * 15) + "ms";
-		}
+		realCount++;
+
+		// Add fade-in animation every texture
+		singleTextureContainer.style.animationDelay = (realCount * 5) + "ms";
 
 		singleTextureContainer.addEventListener("click", function(event) {
 			// Open sidebar
