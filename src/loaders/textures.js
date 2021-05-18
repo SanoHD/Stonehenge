@@ -49,16 +49,16 @@ exports.loadTextures = function() {
 
 
 	let textureSearch = document.createElement("input");
-	textureSearch.id = "texture-search";
+	textureSearch.id = "textures-search";
 	textureSearch.placeholder = translate("textures_search_placeholder");
 	textureSearch.value = textureSearchText;
 
 	let textureSearchClose = document.createElement("p");
-	textureSearchClose.id = "texture-search-close";
+	textureSearchClose.id = "textures-search-close";
 	textureSearchClose.innerHTML = "X";
 
 	if (textureSearchText.length > 0) {
-		textureSearchClose.style.display = "inline-block";
+		textureSearchClose.style.display = "inline";
 	} else {
 		textureSearchClose.style.display = "none";
 	}
@@ -76,7 +76,7 @@ exports.loadTextures = function() {
 	textureSearch.addEventListener("input", function(event) {
 		textureSearchText = event.target.value;
 		if (textureSearchText.length > 0) {
-			textureSearchClose.style.display = "inline-block";
+			textureSearchClose.style.display = "inline";
 		} else {
 			textureSearchClose.style.display = "none";
 		}
