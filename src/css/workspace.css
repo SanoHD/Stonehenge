@@ -241,6 +241,17 @@
 	width: 80%;
 }
 
+#pack-icon-image {
+	border: 2px solid #ddd;
+	border-bottom: 1px solid #ccc;
+	border-radius: 5px;
+
+	margin-left: 50px;
+
+	width: 200px;
+	height: 200px;
+}
+
 #pack-filename {
 	text-align: center;
 	font-size: 17px;

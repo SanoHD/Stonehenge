@@ -7,6 +7,15 @@ exports.loadGeneral = function() {
 
 	pack = shFile;
 
+	let divPackName = document.createElement("div");
+	let divPackDescription = document.createElement("div");
+	let divPackIcon = document.createElement("div");
+
+	divPackName.style.marginTop = "5px";
+	divPackDescription.style.marginTop = "5px";
+	divPackIcon.style.marginTop = "5px";
+
+	divPackIcon.style.height = "200px";
 
 	let packNameLabel = document.createElement("label");
 	let packDescriptionLabel = document.createElement("label");
@@ -30,7 +39,7 @@ exports.loadGeneral = function() {
 
 	let packName = document.createElement("input");
 	let packDescription = document.createElement("input");
-	let packIcon = document.createElement("input");
+	let packIcon = document.createElement("img");
 
 	packName.value = pack["name"];
 	packDescription.value = pack["description"];
@@ -48,22 +57,39 @@ exports.loadGeneral = function() {
 		generalSaveChange("description", event.target.value);
 	});
 
+	if (fs.existsSync(packPath + path.sep + "pack.png")) {
+		packIcon.src = packPath + path.sep + "pack.png";
+	} else {
+		packIcon.src = rootDir + path.sep + "assets" + path.sep + "emptypackpng.png";
+	}
+
 	packName.name = "pack-name";
 	packDescription.name = "pack-description";
 	packIcon.name = "pack-icon";
 
 	packName.classList.add("general-input");
 	packDescription.classList.add("general-input");
-	packIcon.classList.add("general-input-image");
+	packIcon.id = "pack-icon-image";
+	packIconLabel.style.height = "200px";
+	packIconLabel.style.marginTop = "30px";
 
-	content.appendChild(packNameLabel);
-	content.appendChild(packName);
+	divPackIcon.style.display = "flex";
+	divPackIcon.style.marginTop = "20px";
+	divPackIcon.style.paddingTop = "10px";
+	divPackIcon.style.paddingBottom = "10px";
 
+
+	divPackName.appendChild(packNameLabel);
+	divPackName.appendChild(packName);
+
+	divPackDescription.appendChild(packDescriptionLabel);
+	divPackDescription.appendChild(packDescription);
+
+	divPackIcon.appendChild(packIconLabel);
+	divPackIcon.appendChild(packIcon);
+
+	content.appendChild(divPackName);
 	content.appendChild(packFilename);
-
-	content.appendChild(packDescriptionLabel);
-	content.appendChild(packDescription);
-
-	//content.appendChild(packIconLabel);
-	//content.appendChild(packIcon);
+	content.appendChild(divPackDescription);
+	content.appendChild(divPackIcon);
 }
