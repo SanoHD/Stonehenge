@@ -9,7 +9,7 @@ exports.loadWindow = function() {
 		let welcomeNewButton = document.getElementById("welcome-choose-new");
 		welcomeNewButton.addEventListener("click", function() {
 			filePath = dialog.showOpenDialogSync({
-				title: translate("newpackpath"),
+				title: translate("new_pack_path"),
 				properties: ["openDirectory"],
 				defaultPath: rootDir + path.sep + "projects"
 			})[0];
@@ -22,7 +22,7 @@ exports.loadWindow = function() {
 				filePath = filePath + "\\my-resource-pack";
 
 				template = dialog.showOpenDialogSync({
-					title: translate("opentemplatepath"),
+					title: translate("open_template_path"),
 					properties: ["openDirectory"],
 					defaultPath: rootDir + path.sep + "templates" + path.sep + "Default-Texture-Pack-1.16.x"
 				})[0];
@@ -53,7 +53,7 @@ exports.loadWindow = function() {
 		let welcomeEditButton = document.getElementById("welcome-choose-edit");
 		welcomeEditButton.addEventListener("click", function() {
 			filePath = dialog.showOpenDialogSync({
-				title: translate("openpackpath"),
+				title: translate("open_pack_path"),
 				properties: ["openDirectory"],
 				defaultPath: rootDir + path.sep + "projects"
 			});

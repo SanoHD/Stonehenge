@@ -17,11 +17,11 @@ exports.loadTextures = function() {
 	onlyShowLoadedTexturesSelector.id = "textures-show-select";
 
 	let optionYes = document.createElement("option");
-	optionYes.innerHTML = translate("textureonlyshowloaded_yes");
+	optionYes.innerHTML = translate("texture_only_show_loaded_yes");
 	optionYes.value = "yes";
 
 	let optionNo = document.createElement("option");
-	optionNo.innerHTML = translate("textureonlyshowloaded_no");
+	optionNo.innerHTML = translate("texture_only_show_loaded_no");
 	optionNo.value = "no";
 
 	onlyShowLoadedTexturesSelector.appendChild(optionYes);
@@ -89,7 +89,7 @@ exports.loadTextures = function() {
 	let textureContainer = document.createElement("div");
 	textureContainer.innerHTML = "";
 	textureContainer.id = "textures";
-	textureContainer.style.height = (window.innerHeight - 100) + "px";
+	textureContainer.style.height = (window.innerHeight - 250) + "px";
 
 	console.log("Template from:", pack["template"]);
 	let textureFiles = loadFiles(pack["template"])["children"];
