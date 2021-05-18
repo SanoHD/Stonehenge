@@ -53,15 +53,11 @@ exports.loadTextures = function() {
 	textureSearch.placeholder = "Search for blocks";
 
 	textureSearch.addEventListener("change", function(event) {
-		textureSearchText = event.target.value;
-		textureAfterSearch = true;
 		loadTextures();
 	});
 
 	textureSearch.addEventListener("input", function(event) {
-		if (event.target.value.length == 0) {
-			loadTextures();
-		}
+		textureSearchText = event.target.value;
 	});
 
 	content.appendChild(textureSearch);
@@ -101,11 +97,7 @@ exports.loadTextures = function() {
 			singleTextureLoadedText.style.color = "#ddd";
 		}
 
-		if ((textureSearchText != null && textureSearchText.length != 0) || textureAfterSearch) {
-			if (textureAfterSearch) {
-				textureAfterSearch = false;
-			}
-
+		if (textureSearchText != null && textureSearchText.length != 0) {
 			if (path.basename(texture).includes(textureSearchText)) {
 				if (onlyShowLoadedTextures) {
 					if (checkTextureLoaded(texture, isFilename=true)) {
@@ -174,4 +166,5 @@ exports.loadTextures = function() {
 
 	// Add container to content
 	content.appendChild(textureContainer);
+	cursor("normal");
 }
