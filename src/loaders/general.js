@@ -63,6 +63,28 @@ exports.loadGeneral = function() {
 		packIcon.src = rootDir + path.sep + "assets" + path.sep + "emptypackpng.png";
 	}
 
+	packIcon.addEventListener("click", function(event) {
+		iconPath = dialog.showOpenDialogSync({
+			title: translate("open_icon_path"),
+			filters: [{
+				name: "PNG",
+				extensions: ["png"]
+			}],
+			properties: ["openFile"]
+		})[0];
+
+		if (iconPath === undefined) {
+			return;
+		}
+
+		fsx.copySync(iconPath, packPath + path.sep + "pack.png");
+		if (fs.existsSync(packPath + path.sep + "pack.png")) {
+			packIcon.src = packPath + path.sep + "pack.png";
+		} else {
+			packIcon.src = rootDir + path.sep + "assets" + path.sep + "emptypackpng.png";
+		}
+	});
+
 	packName.name = "pack-name";
 	packDescription.name = "pack-description";
 	packIcon.name = "pack-icon";

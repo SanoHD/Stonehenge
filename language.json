@@ -63,6 +63,10 @@
 		"en": "Choose a path for exporting the resource pack",
 		"de": "Wähle, wohin das Resource-Pack exportiert werden soll"
 	},
+	"open_icon_path": {
+		"en": "Choose the resource pack icon (pack.png)",
+		"de": "Wähle das Icon den Resource-Packs (pack.png)"
+	},
 	"texture_only_show_loaded_yes": {
 		"en": "Only show loaded textures",
 		"de": "Nur geladene Texturen anzeigen"
