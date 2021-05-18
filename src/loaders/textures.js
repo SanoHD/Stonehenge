@@ -51,6 +51,23 @@ exports.loadTextures = function() {
 	let textureSearch = document.createElement("input");
 	textureSearch.id = "texture-search";
 	textureSearch.placeholder = "Search for blocks";
+	textureSearch.value = textureSearchText;
+
+	let textureSearchClose = document.createElement("p");
+	textureSearchClose.id = "texture-search-close";
+	textureSearchClose.innerHTML = "X";
+
+	if (textureSearchText.length > 0) {
+		textureSearchClose.style.display = "inline-block";
+	} else {
+		textureSearchClose.style.display = "none";
+	}
+
+	textureSearchClose.addEventListener("click", function() {
+		textureSearchText = "";
+		textureSearch.value = "";
+		loadTextures();
+	});
 
 	textureSearch.addEventListener("change", function(event) {
 		loadTextures();
@@ -58,9 +75,15 @@ exports.loadTextures = function() {
 
 	textureSearch.addEventListener("input", function(event) {
 		textureSearchText = event.target.value;
+		if (textureSearchText.length > 0) {
+			textureSearchClose.style.display = "inline-block";
+		} else {
+			textureSearchClose.style.display = "none";
+		}
 	});
 
 	content.appendChild(textureSearch);
+	content.appendChild(textureSearchClose);
 
 	/*
 	textureContainer.onscroll = function() {

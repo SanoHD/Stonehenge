@@ -54,6 +54,13 @@
 	padding: 2px;
 }
 
+#texture-search-close {
+	display: none;
+	color: white;
+	background-color: #f73;
+	border-radius: 50%;
+}
+
 #texture-sidebar {
 	display: none;
 	position: absolute;

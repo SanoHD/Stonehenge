@@ -58,7 +58,7 @@ var packPath = null;
 var openedTexture = null;
 var loadedTextureFiles = [];
 var onlyShowLoadedTextures = false;
-var textureSearchText = null;
+var textureSearchText = "";
 
 var filePath;
 var templatePath;
