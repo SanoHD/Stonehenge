@@ -5,7 +5,6 @@ exports.loadTextures = function() {
 	sb.style.display = "none";
 
 	content = document.getElementById("content-container");
-	content.innerHTML = "";
 
 	let textureContainer = document.createElement("div");
 	textureContainer.innerHTML = "";
