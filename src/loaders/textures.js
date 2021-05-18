@@ -4,14 +4,14 @@ exports.loadTextures = function() {
 	sb.innerHTML = "";
 	sb.style.display = "none";
 
+
 	content = document.getElementById("content-container");
+	content.innerHTML = "";
 
-	let textureContainer = document.createElement("div");
-	textureContainer.innerHTML = "";
-	textureContainer.id = "textures";
-	textureContainer.style.height = (window.innerHeight - 100) + "px";
-
-
+	let title = document.createElement("h1");
+	title.id = "title";
+	title.innerHTML = translate("window_textures")
+	content.appendChild(title);
 
 	let onlyShowLoadedTexturesSelector = document.createElement("select");
 	onlyShowLoadedTexturesSelector.id = "textures-show-select";
@@ -35,7 +35,7 @@ exports.loadTextures = function() {
 		}
 
 		loadTextures();
-	})
+	});
 
 	if (onlyShowLoadedTextures) {
 		onlyShowLoadedTexturesSelector.value = "yes";
@@ -84,16 +84,12 @@ exports.loadTextures = function() {
 	content.appendChild(textureSearch);
 	content.appendChild(textureSearchClose);
 
-	/*
-	textureContainer.onscroll = function() {
-		let scrollPercent = textureContainer.scrollTop / (textureContainer.scrollHeight - textureContainer.clientHeight);
-		if (scrollPercent > 0.7) {
-			loadTextures(min + 25, max + 25);
-		} else if (scrollPercent < 0.3 && scrollPercent > 0 && min >= 25) {
-			loadTextures(min - 25, max - 25);
-		}
-	}
-	*/
+
+
+	let textureContainer = document.createElement("div");
+	textureContainer.innerHTML = "";
+	textureContainer.id = "textures";
+	textureContainer.style.height = (window.innerHeight - 100) + "px";
 
 	console.log("Template from:", pack["template"]);
 	let textureFiles = loadFiles(pack["template"])["children"];
