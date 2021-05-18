@@ -79,7 +79,7 @@ exports.loadSidebarContent = function(texturePath) {
 				loadTextures();
 			}
 
-			loading.loadSidebarContent(texturePath);
+			loadSidebarContent(texturePath);
 		});
 	}
 
