@@ -8,7 +8,8 @@
 - [ ] Add pack-format option to general
 	- See https://minecraft.fandom.com/wiki/Tutorials/Creating_a_resource_pack#Creating_a_resource_pack
 - [ ] Add "no such textures found" text
-
+- [ ] Edit from .zip
+- [ ] Make sidebar resizable
 
 ### Done
 - [X] Find better package for copying template
