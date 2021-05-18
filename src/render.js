@@ -1,3 +1,4 @@
+const admZip = require("adm-zip");
 const spawn = require("child_process").execSync;
 const dialog = require("electron").remote.dialog;
 const dirTree = require("directory-tree");
@@ -11,6 +12,7 @@ const utilsTexts  = require("./utils/texts.js");
 const utilsUtils  = require("./utils/utils.js");
 
 const loadContent_ = require("./loaders/content.js");
+const loadExport_ = require("./loaders/export.js");
 const loadGeneral_  = require("./loaders/general.js");
 const loadSelectors_ = require("./loaders/selectors.js");
 const loadSidebar_ = require("./loaders/sidebar.js");
@@ -21,6 +23,7 @@ const loadWindow_ = require("./loaders/window.js");
 
 
 var loadContent = loadContent_.loadContent;
+var loadExport = loadExport_.loadExport;
 var loadGeneral = loadGeneral_.loadGeneral;
 var loadSelectors = loadSelectors_.loadSelectors;
 var loadSidebarContent = loadSidebar_.loadSidebarContent;
@@ -72,7 +75,7 @@ var languageStrings = fsx.readJSONSync("language.json");
 
 window.addEventListener("resize", function() {
 	if (viewWindow == windowEnum.TEXTURES) {
-		document.getElementById("textures").style.height = (window.innerHeight - 100) + "px";
+		document.getElementById("textures").style.height = (window.innerHeight - 250) + "px";
 	}
 });
 

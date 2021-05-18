@@ -47,28 +47,36 @@
 		"en": "Export",
 		"de": "Exportieren"
 	},
-	"newpackpath": {
+	"new_pack_path": {
 		"en": "Choose a path for creating the new resource pack",
 		"de": "Wähle, wo das Resource-Pack erstellt werden soll"
 	},
-	"opentemplatepath": {
+	"open_template_path": {
 		"en": "Open the unzipped template resource pack",
 		"de": "Öffne ein entpacktes Resource-Pack als Template"
 	},
-	"openpackpath": {
+	"open_pack_path": {
 		"en": "Open an existing unzipped resource pack",
 		"de": "Öffne ein existierendes, entpacktes Resource-Pack"
 	},
-	"textureonlyshowloaded_yes": {
+	"open_export_path": {
+		"en": "Choose a path for exporting the resource pack",
+		"de": "Wähle, wohin das Resource-Pack exportiert werden soll"
+	},
+	"texture_only_show_loaded_yes": {
 		"en": "Only show loaded textures",
 		"de": "Nur geladene Texturen anzeigen"
 	},
-	"textureonlyshowloaded_no": {
+	"texture_only_show_loaded_no": {
 		"en": "Show all textures",
 		"de": "Alle Texturen anzeigen"
 	},
 	"textures_search_placeholder": {
 		"en": "Search for block textures",
 		"de": "Nach Block-Texturen suchen"
+	},
+	"export_button_text": {
+		"en": "Export!",
+		"de": "Exportieren!"
 	}
 }

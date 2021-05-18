@@ -1,4 +1,5 @@
 node_modules/*
 templates/*
 projects/*
+exported/*
 package-lock.json

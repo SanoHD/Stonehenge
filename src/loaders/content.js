@@ -33,6 +33,7 @@ exports.loadContent = function() {
 
 		case windowEnum.EXPORT:
 			title.innerHTML = translate("window_export");
+			loadExport();
 			break;
 
 		default:
